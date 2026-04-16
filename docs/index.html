@@ -16,7 +16,7 @@
         <li><a href="#how-it-works">How It Works</a></li>
         <li><a href="leaderboard.html">Leaderboard</a></li>
         <li><a href="rules.html">Rules</a></li>
-        <li><a href="https://github.com/akashtalole/gh-hackathon-platform/issues/new/choose" class="cta-btn">Submit</a></li>
+        <li><a href="https://github.com/akashtaloleorg/GH-Hackathon-Platform-Test/issues/new/choose" class="cta-btn">Submit</a></li>
       </ul>
     </nav>
   </header>
@@ -26,8 +26,8 @@
       <h1>Build the Future<br>on GitHub</h1>
       <p>A fully GitHub-native hackathon. Submit challenges, propose ideas, and build solutions — all tracked in Issues. Winners selected by AI-powered evaluation.</p>
       <div class="hero-cta">
-        <a href="https://github.com/akashtalole/gh-hackathon-platform/issues/new?template=solution-submission.yml" class="btn-primary">Submit Your Solution</a>
-        <a href="https://github.com/akashtalole/gh-hackathon-platform/discussions" class="btn-secondary">Join the Community</a>
+        <a href="https://github.com/akashtaloleorg/GH-Hackathon-Platform-Test/issues/new?template=solution-submission.yml" class="btn-primary">Submit Your Solution</a>
+        <a href="https://github.com/akashtaloleorg/GH-Hackathon-Platform-Test/discussions" class="btn-secondary">Join the Community</a>
       </div>
     </div>
     <div class="hero-stats" id="hero-stats">
@@ -54,19 +54,19 @@
           <div class="card-icon">🎯</div>
           <h3>Post a Challenge</h3>
           <p>Have a real problem that needs solving? Post a challenge and let the community build solutions for it.</p>
-          <a href="https://github.com/akashtalole/gh-hackathon-platform/issues/new?template=challenge-submission.yml" class="card-link">Post Challenge →</a>
+          <a href="https://github.com/akashtaloleorg/GH-Hackathon-Platform-Test/issues/new?template=challenge-submission.yml" class="card-link">Post Challenge →</a>
         </div>
         <div class="card">
           <div class="card-icon">💡</div>
           <h3>Submit an Idea</h3>
           <p>Have a creative approach to an existing challenge? Share your idea before you start building.</p>
-          <a href="https://github.com/akashtalole/gh-hackathon-platform/issues/new?template=idea-submission.yml" class="card-link">Share Idea →</a>
+          <a href="https://github.com/akashtaloleorg/GH-Hackathon-Platform-Test/issues/new?template=idea-submission.yml" class="card-link">Share Idea →</a>
         </div>
         <div class="card">
           <div class="card-icon">🚀</div>
           <h3>Submit a Solution</h3>
           <p>Ready to compete? Submit your finished project for AI-powered evaluation and human review.</p>
-          <a href="https://github.com/akashtalole/gh-hackathon-platform/issues/new?template=solution-submission.yml" class="card-link">Submit Solution →</a>
+          <a href="https://github.com/akashtaloleorg/GH-Hackathon-Platform-Test/issues/new?template=solution-submission.yml" class="card-link">Submit Solution →</a>
         </div>
       </div>
     </div>
@@ -115,7 +115,7 @@
         <p class="loading">Loading challenges from GitHub Issues...</p>
       </div>
       <div style="text-align:center; margin-top: 32px;">
-        <a href="https://github.com/akashtalole/gh-hackathon-platform/issues?q=is:open+label:type/challenge" class="btn-secondary">View All Challenges →</a>
+        <a href="https://github.com/akashtaloleorg/GH-Hackathon-Platform-Test/issues?q=is:open+label:type/challenge" class="btn-secondary">View All Challenges →</a>
       </div>
     </div>
   </section>
@@ -168,7 +168,7 @@
       <h2>Ready to Build Something Amazing?</h2>
       <p style="color:var(--color-text-muted); margin: 16px 0 32px;">Join the community on GitHub Discussions, explore the challenges, and submit your solution.</p>
       <div class="hero-cta">
-        <a href="https://github.com/akashtalole/gh-hackathon-platform/discussions" class="btn-primary">Join Discussions</a>
+        <a href="https://github.com/akashtaloleorg/GH-Hackathon-Platform-Test/discussions" class="btn-primary">Join Discussions</a>
         <a href="rules.html" class="btn-secondary">Read the Rules</a>
       </div>
     </div>
@@ -176,7 +176,7 @@
 
   <footer class="site-footer">
     <div class="container">
-      <p>Built entirely on GitHub — Issues, Actions, Projects, Discussions, Pages. <a href="https://github.com/akashtalole/gh-hackathon-platform">View source</a>.</p>
+      <p>Built entirely on GitHub — Issues, Actions, Projects, Discussions, Pages. <a href="https://github.com/akashtaloleorg/GH-Hackathon-Platform-Test">View source</a>.</p>
     </div>
   </footer>
 
@@ -201,7 +201,7 @@
       .then(issues => {
         const grid = document.getElementById('challenges-grid');
         if (!issues || !issues.length) {
-          grid.innerHTML = '<p class="loading">No challenges posted yet. <a href="https://github.com/akashtalole/gh-hackathon-platform/issues/new?template=challenge-submission.yml">Be the first!</a></p>';
+          grid.innerHTML = '<p class="loading">No challenges posted yet. <a href="https://github.com/akashtaloleorg/GH-Hackathon-Platform-Test/issues/new?template=challenge-submission.yml">Be the first!</a></p>';
           return;
         }
         grid.innerHTML = issues.map(issue => `
@@ -218,7 +218,7 @@
         `).join('');
       })
       .catch(() => {
-        document.getElementById('challenges-grid').innerHTML = '<p class="loading">Could not load challenges. <a href="https://github.com/akashtalole/gh-hackathon-platform/issues?q=label:type/challenge">Browse on GitHub</a>.</p>';
+        document.getElementById('challenges-grid').innerHTML = '<p class="loading">Could not load challenges. <a href="https://github.com/akashtaloleorg/GH-Hackathon-Platform-Test/issues?q=label:type/challenge">Browse on GitHub</a>.</p>';
       });
   </script>
 </body>
