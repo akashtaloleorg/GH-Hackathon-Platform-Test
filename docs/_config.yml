@@ -1,0 +1,21 @@
+title: "GitHub Hackathon Platform"
+description: "A GitHub-native hackathon platform — submit challenges, ideas, and solutions. Evaluated by GitHub Copilot AI."
+baseurl: ""
+url: ""
+
+# Use minima theme for sensible defaults; pages override layout as needed
+theme: minima
+
+plugins:
+  - jekyll-seo-tag
+
+# Jekyll will serve _data/ files as liquid variables
+data_dir: _data
+
+# Exclude non-site files from build
+exclude:
+  - "*.sh"
+  - "*.js"
+  - node_modules/
+  - scripts/
+  - .github/

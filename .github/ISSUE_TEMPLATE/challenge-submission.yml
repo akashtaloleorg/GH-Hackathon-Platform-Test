@@ -1,0 +1,110 @@
+name: "Challenge Submission"
+description: "Submit a hackathon challenge for participants to solve"
+title: "[CHALLENGE] "
+labels: ["type/challenge", "status/pending-review"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Submit a Challenge
+        Use this form to propose a challenge that participants can solve during the hackathon.
+        Fill in all fields completely. Incomplete submissions will be flagged for more info.
+
+  - type: input
+    id: challenge-title
+    attributes:
+      label: Challenge Title
+      description: A concise, memorable name for your challenge
+      placeholder: "e.g., Build a Carbon Footprint Tracker"
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem-statement
+    attributes:
+      label: Problem Statement
+      description: Describe the problem this challenge addresses. Be specific about who is affected and how.
+      placeholder: "Who has this problem? What are the consequences? What does the current state look like?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: success-criteria
+    attributes:
+      label: Success Criteria
+      description: What does a winning solution look like? List 3-5 measurable criteria.
+      placeholder: |
+        - The solution accurately tracks CO2 emissions with < 5% error rate
+        - Users can log activities in under 30 seconds
+        - The app provides weekly summaries via email
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Challenge Category
+      description: Select the primary category for this challenge
+      options:
+        - Sustainability & Climate
+        - Health & Wellbeing
+        - Education & Learning
+        - Civic Tech & Government
+        - Finance & Economic Equity
+        - Infrastructure & Developer Tools
+        - AI & Machine Learning
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: difficulty
+    attributes:
+      label: Difficulty Level
+      options:
+        - Beginner (< 1 year experience)
+        - Intermediate (1-3 years experience)
+        - Advanced (3+ years experience)
+        - Open (any experience level)
+    validations:
+      required: true
+
+  - type: textarea
+    id: resources
+    attributes:
+      label: Resources & Datasets
+      description: List any APIs, datasets, or resources participants can use
+      placeholder: |
+        - EPA Open Data API: https://...
+        - Carbon Intensity API: https://...
+    validations:
+      required: false
+
+  - type: textarea
+    id: prize-description
+    attributes:
+      label: Prize or Recognition
+      description: What does the winner of this challenge receive?
+      placeholder: "$500 cash prize + featured in monthly newsletter"
+    validations:
+      required: true
+
+  - type: input
+    id: sponsor-org
+    attributes:
+      label: Sponsoring Organization (if any)
+      placeholder: "Acme Corp / Individual"
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Submission Agreement
+      options:
+        - label: I confirm this challenge is original and I have the right to submit it
+          required: true
+        - label: I agree to the hackathon Code of Conduct
+          required: true
+        - label: I understand the organizers may modify or reject this challenge
+          required: true

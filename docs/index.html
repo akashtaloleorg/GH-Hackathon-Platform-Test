@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitHub Hackathon Platform</title>
+  <meta name="description" content="A GitHub-native hackathon platform. Submit challenges, ideas, and solutions. Winners selected by AI.">
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav-container">
+      <a class="logo" href="index.html">⚡ GH Hackathon</a>
+      <ul class="nav-links">
+        <li><a href="#challenges">Challenges</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="leaderboard.html">Leaderboard</a></li>
+        <li><a href="rules.html">Rules</a></li>
+        <li><a href="https://github.com/akashtalole/gh-hackathon-platform/issues/new/choose" class="cta-btn">Submit</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Build the Future<br>on GitHub</h1>
+      <p>A fully GitHub-native hackathon. Submit challenges, propose ideas, and build solutions — all tracked in Issues. Winners selected by AI-powered evaluation.</p>
+      <div class="hero-cta">
+        <a href="https://github.com/akashtalole/gh-hackathon-platform/issues/new?template=solution-submission.yml" class="btn-primary">Submit Your Solution</a>
+        <a href="https://github.com/akashtalole/gh-hackathon-platform/discussions" class="btn-secondary">Join the Community</a>
+      </div>
+    </div>
+    <div class="hero-stats" id="hero-stats">
+      <div class="stat-card">
+        <span class="stat-number" id="stat-submissions">—</span>
+        <span class="stat-label">Submissions</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number" id="stat-evaluated">—</span>
+        <span class="stat-label">Evaluated</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number" id="stat-winners">—</span>
+        <span class="stat-label">Winners</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="submit-types" class="section">
+    <div class="container">
+      <h2>Three Ways to Participate</h2>
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-icon">🎯</div>
+          <h3>Post a Challenge</h3>
+          <p>Have a real problem that needs solving? Post a challenge and let the community build solutions for it.</p>
+          <a href="https://github.com/akashtalole/gh-hackathon-platform/issues/new?template=challenge-submission.yml" class="card-link">Post Challenge →</a>
+        </div>
+        <div class="card">
+          <div class="card-icon">💡</div>
+          <h3>Submit an Idea</h3>
+          <p>Have a creative approach to an existing challenge? Share your idea before you start building.</p>
+          <a href="https://github.com/akashtalole/gh-hackathon-platform/issues/new?template=idea-submission.yml" class="card-link">Share Idea →</a>
+        </div>
+        <div class="card">
+          <div class="card-icon">🚀</div>
+          <h3>Submit a Solution</h3>
+          <p>Ready to compete? Submit your finished project for AI-powered evaluation and human review.</p>
+          <a href="https://github.com/akashtalole/gh-hackathon-platform/issues/new?template=solution-submission.yml" class="card-link">Submit Solution →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="how-it-works" class="section section-alt">
+    <div class="container">
+      <h2>How It Works</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3>Submit via GitHub Issues</h3>
+            <p>Use structured issue forms to submit challenges, ideas, or final solutions. Everything is version-controlled and public.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3>AI Evaluation Pipeline</h3>
+            <p>GitHub Actions automatically triggers evaluation via the GitHub Models API (GPT-4o). Scores are posted as issue comments within minutes.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3>Live Leaderboard</h3>
+            <p>The leaderboard updates automatically after every evaluation. Track rankings across 5 dimensions: Innovation, Technical Quality, Documentation, Feasibility, and Impact.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h3>Human + AI Winner Selection</h3>
+            <p>AI scores inform human judges who finalize the rankings. Winners are announced via GitHub Releases.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="challenges" class="section">
+    <div class="container">
+      <h2>Active Challenges</h2>
+      <div id="challenges-grid" class="challenges-grid">
+        <p class="loading">Loading challenges from GitHub Issues...</p>
+      </div>
+      <div style="text-align:center; margin-top: 32px;">
+        <a href="https://github.com/akashtalole/gh-hackathon-platform/issues?q=is:open+label:type/challenge" class="btn-secondary">View All Challenges →</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="timeline" class="section section-alt">
+    <div class="container">
+      <h2>Hackathon Timeline</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot phase-active" data-phase="registration"></div>
+          <div class="timeline-content">
+            <h3>Registration</h3>
+            <p>Teams register and challenges are published</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" data-phase="submission"></div>
+          <div class="timeline-content">
+            <h3>Idea Submission</h3>
+            <p>Submit your approach before building</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" data-phase="submission"></div>
+          <div class="timeline-content">
+            <h3>Solution Submission</h3>
+            <p>Submit your completed project for judging</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" data-phase="judging"></div>
+          <div class="timeline-content">
+            <h3>Judging</h3>
+            <p>AI-assisted evaluation with human review</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" data-phase="results"></div>
+          <div class="timeline-content">
+            <h3>Winners Announced</h3>
+            <p>Results published via GitHub Releases</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section cta-section">
+    <div class="container" style="text-align:center;">
+      <h2>Ready to Build Something Amazing?</h2>
+      <p style="color:var(--color-text-muted); margin: 16px 0 32px;">Join the community on GitHub Discussions, explore the challenges, and submit your solution.</p>
+      <div class="hero-cta">
+        <a href="https://github.com/akashtalole/gh-hackathon-platform/discussions" class="btn-primary">Join Discussions</a>
+        <a href="rules.html" class="btn-secondary">Read the Rules</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Built entirely on GitHub — Issues, Actions, Projects, Discussions, Pages. <a href="https://github.com/akashtalole/gh-hackathon-platform">View source</a>.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Load stats from leaderboard data
+    fetch('_data/leaderboard.json')
+      .then(r => r.json())
+      .then(data => {
+        const total = data.total_submissions || 0;
+        const winners = (data.entries || []).filter(e => e.is_winner).length;
+        document.getElementById('stat-submissions').textContent = total;
+        document.getElementById('stat-evaluated').textContent = total;
+        document.getElementById('stat-winners').textContent = winners;
+      })
+      .catch(() => {});
+
+    // Load active challenges from GitHub Issues API
+    fetch('https://api.github.com/repos/akashtalole/gh-hackathon-platform/issues?labels=type%2Fchallenge&state=open&per_page=6', {
+      headers: { Accept: 'application/vnd.github+json' }
+    })
+      .then(r => r.json())
+      .then(issues => {
+        const grid = document.getElementById('challenges-grid');
+        if (!issues || !issues.length) {
+          grid.innerHTML = '<p class="loading">No challenges posted yet. <a href="https://github.com/akashtalole/gh-hackathon-platform/issues/new?template=challenge-submission.yml">Be the first!</a></p>';
+          return;
+        }
+        grid.innerHTML = issues.map(issue => `
+          <div class="challenge-card">
+            <h3><a href="${issue.html_url}" target="_blank">${issue.title.replace(/^\[CHALLENGE\]\s*/i, '')}</a></h3>
+            <div class="challenge-meta">
+              ${issue.labels.filter(l => l.name.startsWith('category/')).map(l =>
+                `<span class="badge">${l.name.replace('category/', '')}</span>`
+              ).join('')}
+            </div>
+            <p>${(issue.body || '').substring(0, 150).replace(/[#*`]/g, '')}...</p>
+            <a href="${issue.html_url}" target="_blank" class="card-link">View Challenge →</a>
+          </div>
+        `).join('');
+      })
+      .catch(() => {
+        document.getElementById('challenges-grid').innerHTML = '<p class="loading">Could not load challenges. <a href="https://github.com/akashtalole/gh-hackathon-platform/issues?q=label:type/challenge">Browse on GitHub</a>.</p>';
+      });
+  </script>
+</body>
+</html>

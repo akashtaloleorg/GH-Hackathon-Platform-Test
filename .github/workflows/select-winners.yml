@@ -1,0 +1,85 @@
+name: Winner Selection
+
+on:
+  workflow_dispatch:
+    inputs:
+      top_n:
+        description: "Number of winners to select"
+        required: true
+        default: "3"
+        type: string
+      dry_run:
+        description: "Dry run — preview without applying labels or creating Release"
+        required: true
+        default: "true"
+        type: boolean
+
+permissions:
+  issues: write
+  contents: write
+  models: read
+
+jobs:
+  select-winners:
+    runs-on: ubuntu-latest
+    environment: Results
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run winner selection
+        id: select
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          TOP_N: ${{ inputs.top_n }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          EVAL_MODEL: ${{ vars.EVAL_MODEL || 'gpt-4o' }}
+        run: node scripts/select-winners.js
+
+      - name: Create winner GitHub Release
+        if: ${{ inputs.dry_run == false }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WINNERS_JSON: ${{ steps.select.outputs.winners_json }}
+        run: |
+          node -e "
+            const winners = JSON.parse(process.env.WINNERS_JSON);
+            let body = '# 🏆 Hackathon Winners\n\n';
+            body += 'Congratulations to all participants! Here are our winners:\n\n';
+            winners.forEach((w, i) => {
+              const medals = ['🥇', '🥈', '🥉'];
+              body += \`## \${medals[i] || (i+1 + '.')} \${w.title}\n\`;
+              body += \`**Team:** \${w.team} | **Score:** \${w.scores.total}/50\n\`;
+              if (w.repo_url) body += \`**Repository:** \${w.repo_url}\n\`;
+              body += \`\n\${w.ai_citation}\n\n---\n\n\`;
+            });
+            body += '_Full leaderboard available at the hackathon website._';
+            require('fs').writeFileSync('/tmp/release-notes.md', body);
+            console.log(body);
+          "
+          TAG="winners-$(date +%Y%m%d-%H%M)"
+          gh release create "$TAG" \
+            --title "Hackathon Winners Announced" \
+            --notes-file /tmp/release-notes.md \
+            --latest
+          echo "Release created: $TAG"
+
+      - name: Post summary
+        if: always()
+        run: |
+          echo "## Winner Selection Complete" >> $GITHUB_STEP_SUMMARY
+          echo "- Dry run: ${{ inputs.dry_run }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Winners selected: ${{ inputs.top_n }}" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ inputs.dry_run }}" = "false" ]; then
+            echo "- Labels applied: yes" >> $GITHUB_STEP_SUMMARY
+            echo "- GitHub Release: created" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- Re-run with dry_run=false to apply labels and create Release" >> $GITHUB_STEP_SUMMARY
+          fi

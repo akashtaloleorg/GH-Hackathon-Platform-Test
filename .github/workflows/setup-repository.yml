@@ -1,0 +1,76 @@
+name: Repository Bootstrap Setup
+
+on:
+  workflow_dispatch:
+    inputs:
+      project_name:
+        description: "GitHub Projects v2 board name"
+        required: true
+        default: "Hackathon Judging Board"
+      hackathon_name:
+        description: "Display name for this hackathon event"
+        required: true
+        default: "GitHub Hackathon 2026"
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create labels
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: bash scripts/setup-labels.sh
+
+      - name: Create milestones
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const milestones = [
+              { title: 'Registration Phase', description: 'Teams register and challenges are posted' },
+              { title: 'Idea Submission Phase', description: 'Teams submit their approaches' },
+              { title: 'Solution Submission Phase', description: 'Final solutions submitted for judging' },
+              { title: 'Judging Phase', description: 'AI-assisted evaluation and human review' },
+              { title: 'Winners Announced', description: 'Final results published via GitHub Releases' }
+            ];
+            for (const milestone of milestones) {
+              await github.rest.issues.createMilestone({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ...milestone
+              }).catch(e => console.log(`Milestone "${milestone.title}" may already exist: ${e.message}`));
+            }
+            console.log('Milestones created');
+
+      - name: Setup GitHub Project
+        env:
+          GITHUB_TOKEN: ${{ secrets.PROJECT_TOKEN || secrets.GITHUB_TOKEN }}
+          PROJECT_NAME: ${{ inputs.project_name }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: bash scripts/setup-project.sh
+
+      - name: Output setup instructions
+        run: |
+          echo "## ✅ Repository Bootstrap Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Completed" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Labels created" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Milestones created" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ GitHub Project created (check output above for PROJECT_NUMBER)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Manual Steps Required" >> $GITHUB_STEP_SUMMARY
+          echo "1. **Set PROJECT_NUMBER variable**: Settings → Secrets and Variables → Actions → Variables → New variable: \`PROJECT_NUMBER\`" >> $GITHUB_STEP_SUMMARY
+          echo "2. **Enable GitHub Pages**: Settings → Pages → Source: Deploy from branch → Branch: \`main\`, Folder: \`/docs\`" >> $GITHUB_STEP_SUMMARY
+          echo "3. **Enable Discussions**: Settings → General → Features → Discussions ✓" >> $GITHUB_STEP_SUMMARY
+          echo "4. **Create Discussion categories**: Q&A, Ideas, Show & Tell, Announcements (restricted), Appeals" >> $GITHUB_STEP_SUMMARY
+          echo "5. **Create Environments**: Settings → Environments: \`Registration\`, \`Submission\`, \`Judging\`, \`Results\`" >> $GITHUB_STEP_SUMMARY
+          echo "6. **Add reviewer gate on Results**: Settings → Environments → Results → Required reviewers → add yourself" >> $GITHUB_STEP_SUMMARY
+          echo "7. **Open the hackathon**: Run the 'Phase Transition Gate' workflow with target_phase=Registration" >> $GITHUB_STEP_SUMMARY

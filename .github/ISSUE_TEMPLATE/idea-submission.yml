@@ -1,0 +1,116 @@
+name: "Idea Submission"
+description: "Submit your idea for solving a hackathon challenge"
+title: "[IDEA] "
+labels: ["type/idea", "status/pending-review"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Submit Your Idea
+        An Idea submission describes your approach to solving a challenge. You do not need working code yet.
+        Link your idea to a Challenge using the Challenge Issue number below.
+
+  - type: input
+    id: idea-title
+    attributes:
+      label: Idea Title
+      placeholder: "e.g., EcoTrack - Gamified Carbon Tracking App"
+    validations:
+      required: true
+
+  - type: input
+    id: challenge-ref
+    attributes:
+      label: Related Challenge Issue Number
+      description: Enter the issue number of the Challenge you are addressing (e.g., #42)
+      placeholder: "#42"
+    validations:
+      required: true
+
+  - type: textarea
+    id: elevator-pitch
+    attributes:
+      label: Elevator Pitch
+      description: Describe your idea in 2-3 sentences. What does it do, for whom, and how?
+      placeholder: "EcoTrack is a mobile app that gamifies daily carbon footprint tracking for urban millennials by turning sustainability into a competitive social experience."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the technical approach, key features, and user experience
+      placeholder: |
+        ## Core Features
+        - Real-time CO2 tracking via activity logging
+        - Social leaderboard with friends
+        - Weekly AI-generated sustainability tips
+
+        ## Technical Stack
+        - React Native (iOS + Android)
+        - Firebase Realtime Database
+        - OpenAI API for tip generation
+    validations:
+      required: true
+
+  - type: textarea
+    id: innovation
+    attributes:
+      label: What Makes This Innovative?
+      description: How is this different from existing solutions? What is the novel insight?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: team-size
+    attributes:
+      label: Team Size
+      options:
+        - Solo (1 person)
+        - Small team (2-3 people)
+        - Full team (4-5 people)
+    validations:
+      required: true
+
+  - type: input
+    id: team-members
+    attributes:
+      label: Team Members (GitHub usernames)
+      description: List all team member GitHub usernames separated by commas
+      placeholder: "@alice, @bob, @carol"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: tech-stack
+    attributes:
+      label: Primary Technology Domain
+      options:
+        - Web (Frontend/Fullstack)
+        - Mobile (iOS/Android)
+        - AI/ML
+        - Data Engineering
+        - DevTools/Infrastructure
+        - Hardware/IoT
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: repo-link
+    attributes:
+      label: GitHub Repository (if already created)
+      placeholder: "https://github.com/username/project"
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Submission Agreement
+      options:
+        - label: All team members agree to the hackathon Code of Conduct
+          required: true
+        - label: This idea is original work or properly attributed
+          required: true

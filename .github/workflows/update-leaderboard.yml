@@ -1,0 +1,60 @@
+name: Update Leaderboard
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */6 * * *'  # Every 6 hours during judging
+  issues:
+    types: [labeled]
+
+permissions:
+  issues: read
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  generate-leaderboard:
+    runs-on: ubuntu-latest
+    # Run on manual dispatch, schedule, or when bot marks an issue as evaluated
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'schedule' ||
+      github.event.label.name == 'bot/evaluated'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Generate leaderboard data
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: node scripts/update-leaderboard.js
+
+      - name: Commit leaderboard data
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Actions"
+          git add docs/_data/leaderboard.json
+          git diff --staged --quiet || git commit -m "chore: update leaderboard data [skip ci]"
+          git push
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
