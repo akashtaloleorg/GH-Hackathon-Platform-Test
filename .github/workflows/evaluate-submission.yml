@@ -73,7 +73,7 @@ jobs:
             const body = [
               '## AI Evaluation Report',
               '',
-              `> **Model:** \`${model}\` | **Date:** ${date}`,
+              `> Model: \`${model}\` | Date: ${date}`,
               '> This evaluation was generated automatically using a standardized rubric. Final rankings incorporate human judge review.',
               '',
               '### Scores',
