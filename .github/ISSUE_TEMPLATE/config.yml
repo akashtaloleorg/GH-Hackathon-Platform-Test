@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Ask a question
+    url: https://github.com/akashtalole/gh-hackathon-platform/discussions/categories/q-a
+    about: Use GitHub Discussions for questions and community support
+  - name: Share an idea informally
+    url: https://github.com/akashtalole/gh-hackathon-platform/discussions/categories/ideas
+    about: Brainstorm ideas before making a formal submission

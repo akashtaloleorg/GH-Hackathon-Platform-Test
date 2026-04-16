@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leaderboard — GitHub Hackathon Platform</title>
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav-container">
+      <a class="logo" href="index.html">⚡ GH Hackathon</a>
+      <ul class="nav-links">
+        <li><a href="index.html#challenges">Challenges</a></li>
+        <li><a href="leaderboard.html" class="active">Leaderboard</a></li>
+        <li><a href="rules.html">Rules</a></li>
+        <li><a href="https://github.com/akashtalole/gh-hackathon-platform/issues/new/choose" class="cta-btn">Submit</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container" style="padding-top: 40px; padding-bottom: 80px;">
+    <div style="display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:8px;">
+      <h1>Live Leaderboard</h1>
+      <span class="last-updated" id="last-updated"></span>
+    </div>
+    <p style="color:var(--color-text-muted); margin-bottom:28px;">
+      Scores are generated automatically by GPT-4o via GitHub Models API using a standardized rubric.
+      Final rankings incorporate human judge review before winners are announced.
+    </p>
+
+    <div class="leaderboard-controls">
+      <input type="text" id="search-input" placeholder="Search projects or teams..." oninput="filterTable()">
+      <select id="sort-select" onchange="sortTable(this.value)">
+        <option value="total">Sort: Total Score</option>
+        <option value="innovation">Sort: Innovation</option>
+        <option value="technical_quality">Sort: Technical Quality</option>
+        <option value="documentation">Sort: Documentation</option>
+        <option value="feasibility">Sort: Feasibility</option>
+        <option value="impact">Sort: Impact</option>
+      </select>
+      <label class="filter-label">
+        <input type="checkbox" id="winners-only" onchange="filterTable()"> Winners only
+      </label>
+      <label class="filter-label">
+        <input type="checkbox" id="finalists-only" onchange="filterTable()"> Finalists only
+      </label>
+    </div>
+
+    <div id="leaderboard-container">
+      <p class="loading">Loading leaderboard data...</p>
+    </div>
+
+    <div style="margin-top:32px; padding: 16px; background: var(--color-surface); border-radius: var(--radius); border: 1px solid var(--color-border);">
+      <strong>Scoring Rubric</strong> (each dimension 0–10, total 50):
+      <span class="rubric-pill">Innovation</span>
+      <span class="rubric-pill">Technical Quality</span>
+      <span class="rubric-pill">Documentation</span>
+      <span class="rubric-pill">Feasibility</span>
+      <span class="rubric-pill">Impact</span>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Built on GitHub — <a href="https://github.com/akashtalole/gh-hackathon-platform">View source</a>.</p>
+    </div>
+  </footer>
+
+  <script>
+    let allEntries = [];
+
+    fetch('_data/leaderboard.json')
+      .then(r => r.json())
+      .then(data => {
+        allEntries = data.entries || [];
+        document.getElementById('last-updated').textContent =
+          `Last updated: ${new Date(data.generated_at).toLocaleString()}`;
+        renderTable(allEntries);
+      })
+      .catch(() => {
+        document.getElementById('leaderboard-container').innerHTML =
+          '<p class="loading">Leaderboard data not yet available — evaluations are in progress. Check back soon!</p>';
+      });
+
+    function renderTable(entries) {
+      const container = document.getElementById('leaderboard-container');
+      if (!entries || entries.length === 0) {
+        container.innerHTML = '<p class="loading">No evaluated submissions yet.</p>';
+        return;
+      }
+
+      const medals = ['🥇', '🥈', '🥉'];
+      const rows = entries.map(e => `
+        <tr class="${e.is_winner ? 'winner-row' : ''} ${e.is_finalist && !e.is_winner ? 'finalist-row' : ''}">
+          <td class="rank">${medals[e.rank - 1] || e.rank}${e.is_winner ? ' 🏆' : ''}</td>
+          <td><a href="${e.issue_url}" target="_blank">${e.title}</a></td>
+          <td>${e.team}</td>
+          <td class="score-cell">${e.scores.innovation}</td>
+          <td class="score-cell">${e.scores.technical_quality}</td>
+          <td class="score-cell">${e.scores.documentation}</td>
+          <td class="score-cell">${e.scores.feasibility}</td>
+          <td class="score-cell">${e.scores.impact}</td>
+          <td class="total-score">${e.scores.total}/50</td>
+          <td>${e.repo_url ? `<a href="${e.repo_url}" target="_blank">Repo ↗</a>` : '—'}</td>
+        </tr>`).join('');
+
+      container.innerHTML = `
+        <table class="leaderboard-table" id="lb-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Project</th>
+              <th>Team</th>
+              <th title="Innovation">💡</th>
+              <th title="Technical Quality">⚙️</th>
+              <th title="Documentation">📄</th>
+              <th title="Feasibility">🎯</th>
+              <th title="Impact">🌍</th>
+              <th>Total</th>
+              <th>Code</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>`;
+    }
+
+    function filterTable() {
+      const search = document.getElementById('search-input').value.toLowerCase();
+      const winnersOnly = document.getElementById('winners-only').checked;
+      const finalistsOnly = document.getElementById('finalists-only').checked;
+
+      let filtered = allEntries.filter(e => {
+        if (winnersOnly && !e.is_winner) return false;
+        if (finalistsOnly && !e.is_finalist) return false;
+        if (search && !e.title.toLowerCase().includes(search) && !e.team.toLowerCase().includes(search)) return false;
+        return true;
+      });
+      renderTable(filtered);
+    }
+
+    function sortTable(field) {
+      const sorted = [...allEntries].sort((a, b) => {
+        const av = field === 'total' ? a.scores.total : a.scores[field] || 0;
+        const bv = field === 'total' ? b.scores.total : b.scores[field] || 0;
+        return bv - av;
+      });
+      renderTable(sorted);
+    }
+  </script>
+</body>
+</html>

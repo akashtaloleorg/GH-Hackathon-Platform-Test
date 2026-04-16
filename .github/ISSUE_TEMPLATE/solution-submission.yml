@@ -1,0 +1,118 @@
+name: "Solution Submission"
+description: "Submit your completed solution for judging"
+title: "[SOLUTION] "
+labels: ["type/solution", "status/pending-evaluation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Final Solution Submission
+        This is your official entry for judging. Submit only when your solution is complete.
+        The AI evaluation pipeline will automatically score your submission after it is reviewed by an organizer.
+
+  - type: input
+    id: solution-title
+    attributes:
+      label: Project Name
+    validations:
+      required: true
+
+  - type: input
+    id: challenge-ref
+    attributes:
+      label: Challenge Issue Number
+      placeholder: "#42"
+    validations:
+      required: true
+
+  - type: input
+    id: idea-ref
+    attributes:
+      label: Idea Issue Number (if previously submitted)
+      placeholder: "#57"
+    validations:
+      required: false
+
+  - type: input
+    id: repo-url
+    attributes:
+      label: Project Repository URL
+      description: Must be a public GitHub repository
+      placeholder: "https://github.com/team/project"
+    validations:
+      required: true
+
+  - type: input
+    id: demo-url
+    attributes:
+      label: Live Demo URL
+      description: Link to a live deployment, video demo, or screenshot gallery
+      placeholder: "https://myproject.vercel.app or https://youtu.be/..."
+    validations:
+      required: false
+
+  - type: textarea
+    id: project-description
+    attributes:
+      label: Project Description
+      description: Full description of what you built, who it's for, and how it works
+    validations:
+      required: true
+
+  - type: textarea
+    id: technical-implementation
+    attributes:
+      label: Technical Implementation
+      description: Describe the architecture, key technical decisions, and how you implemented the core features
+      placeholder: |
+        ## Architecture
+        Describe the system design here
+
+        ## Key Technical Decisions
+        - Why did you choose X over Y?
+        - What was the hardest technical problem you solved?
+
+        ## Tech Stack
+        List all technologies used
+    validations:
+      required: true
+
+  - type: textarea
+    id: innovation-impact
+    attributes:
+      label: Innovation & Impact
+      description: What makes your solution innovative? What is the potential real-world impact?
+    validations:
+      required: true
+
+  - type: textarea
+    id: challenges-faced
+    attributes:
+      label: Challenges Faced
+      description: What were the main obstacles you encountered and how did you overcome them?
+    validations:
+      required: true
+
+  - type: input
+    id: team-members
+    attributes:
+      label: Team Members (GitHub usernames)
+      placeholder: "@alice, @bob, @carol"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: submission-checklist
+    attributes:
+      label: Submission Checklist
+      options:
+        - label: Repository is public and accessible
+          required: true
+        - label: README.md includes setup instructions
+          required: true
+        - label: Code was written during the hackathon period
+          required: true
+        - label: All team members agree to this submission
+          required: true
+        - label: I agree to the hackathon Code of Conduct
+          required: true

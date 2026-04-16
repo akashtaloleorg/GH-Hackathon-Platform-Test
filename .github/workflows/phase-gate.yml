@@ -1,0 +1,121 @@
+name: Phase Transition Gate
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_phase:
+        description: "Target phase to activate"
+        required: true
+        type: choice
+        options:
+          - Registration
+          - Submission
+          - Judging
+          - Results
+      confirm:
+        description: "Type CONFIRM to proceed with the phase transition"
+        required: true
+        type: string
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate confirmation
+        run: |
+          if [ "${{ inputs.confirm }}" != "CONFIRM" ]; then
+            echo "::error::Confirmation string must be exactly 'CONFIRM'. Got: '${{ inputs.confirm }}'"
+            exit 1
+          fi
+          echo "Confirmed. Transitioning to phase: ${{ inputs.target_phase }}"
+
+  transition:
+    needs: validate
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.target_phase }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Apply phase labels to all open submission issues
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const phase = '${{ inputs.target_phase }}'.toLowerCase();
+            const newLabel = `phase/${phase}`;
+            const allPhaseLabels = [
+              'phase/registration', 'phase/submission', 'phase/judging', 'phase/results'
+            ];
+
+            const issues = await github.paginate(github.rest.issues.listForRepo, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              per_page: 100
+            });
+
+            const submissionIssues = issues.filter(issue =>
+              issue.labels.some(l => ['type/challenge', 'type/idea', 'type/solution'].includes(l.name))
+            );
+
+            console.log(`Found ${submissionIssues.length} submission issues to update`);
+
+            for (const issue of submissionIssues) {
+              // Remove old phase labels
+              for (const oldLabel of allPhaseLabels) {
+                if (issue.labels.some(l => l.name === oldLabel) && oldLabel !== newLabel) {
+                  await github.rest.issues.removeLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issue.number,
+                    name: oldLabel
+                  }).catch(() => {});
+                }
+              }
+              // Apply new phase label
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                labels: [newLabel]
+              });
+            }
+            console.log(`Phase transition to '${phase}' complete`);
+
+      - name: Output announcement text
+        run: |
+          PHASE="${{ inputs.target_phase }}"
+          echo "## Phase Transition: $PHASE" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Suggested Announcement for GitHub Discussions" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "$PHASE" = "Registration" ]; then
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "## 🚀 Registration is Now Open!" >> $GITHUB_STEP_SUMMARY
+            echo "Welcome to the hackathon! Browse the posted challenges and register your team by opening an Idea submission." >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          elif [ "$PHASE" = "Submission" ]; then
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "## 📦 Solution Submissions are Now Open!" >> $GITHUB_STEP_SUMMARY
+            echo "The clock is ticking! Submit your final solutions using the Solution Submission template before the deadline." >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          elif [ "$PHASE" = "Judging" ]; then
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "## ⚖️ Judging Phase Has Begun!" >> $GITHUB_STEP_SUMMARY
+            echo "Submissions are closed. Our AI-assisted judging pipeline is evaluating all entries. Watch the leaderboard for live scores!" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          elif [ "$PHASE" = "Results" ]; then
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "## 🏆 Results Are In!" >> $GITHUB_STEP_SUMMARY
+            echo "Thank you to all participants! Winners have been announced — check the Releases page and the leaderboard." >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Post this text in GitHub Discussions > Announcements" >> $GITHUB_STEP_SUMMARY
