@@ -74,7 +74,7 @@ jobs:
             const body = [
               '## AI Evaluation Report',
               '',
-              `> **Model:** \`${model}\` | **Date:** ${date}`,
+              `> Model: \`${model}\` | Date: ${date}`,
               '> This evaluation was generated automatically using a standardized rubric. Final rankings incorporate human judge review.',
               '',
               '### Scores',
@@ -86,7 +86,7 @@ jobs:
               `| Documentation | ${evaluation.documentation}/10 | ${evaluation.documentation_rationale} |`,
               `| Feasibility | ${evaluation.feasibility}/10 | ${evaluation.feasibility_rationale} |`,
               `| Impact | ${evaluation.impact}/10 | ${evaluation.impact_rationale} |`,
-              `| **Total** | **${total}/50** | |`,
+              `| Total | ${total}/50 | |`,
               '',
               '### Strengths',
               evaluation.strengths,
