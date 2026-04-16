@@ -66,15 +66,14 @@ jobs:
             const evaluation = JSON.parse(process.env.EVALUATION_JSON);
             const total = evaluation.innovation + evaluation.technical_quality +
                           evaluation.documentation + evaluation.feasibility + evaluation.impact;
-
-            const body = `## AI Evaluation Report
+            
             const model = process.env.EVAL_MODEL || 'gpt-4o';
             const date = new Date().toISOString().split('T')[0];
- 
+            
             const body = [
               '## AI Evaluation Report',
               '',
-              `> Model: \`${model}\` | Date: ${date}`,
+              `> **Model:** \`${model}\` | **Date:** ${date}`,
               '> This evaluation was generated automatically using a standardized rubric. Final rankings incorporate human judge review.',
               '',
               '### Scores',
@@ -86,7 +85,7 @@ jobs:
               `| Documentation | ${evaluation.documentation}/10 | ${evaluation.documentation_rationale} |`,
               `| Feasibility | ${evaluation.feasibility}/10 | ${evaluation.feasibility_rationale} |`,
               `| Impact | ${evaluation.impact}/10 | ${evaluation.impact_rationale} |`,
-              `| Total | ${total}/50 | |`,
+              `| **Total** | **${total}/50** | |`,
               '',
               '### Strengths',
               evaluation.strengths,
@@ -100,8 +99,12 @@ jobs:
               '---',
               '*To appeal this evaluation, open a Discussion in the [Appeals](../../discussions) category within 48 hours of score publication.*'
             ].join('\n');
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
               issue_number: context.issue.number,
-              body
+              body: body
             });
 
       - name: Apply evaluated labels
