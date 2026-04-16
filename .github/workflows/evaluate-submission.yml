@@ -69,7 +69,10 @@ jobs:
             
             const model = process.env.EVAL_MODEL || 'gpt-4o';
             const date = new Date().toISOString().split('T')[0];
-            
+
+            const bold = (s) => `**${s}**`;   // ← construct ** at runtime, not in source
+            const totalRow = `| ${bold('Total')} | ${bold(total + '/50')} | |`;
+
             const body = [
               '## AI Evaluation Report',
               '',
@@ -85,7 +88,7 @@ jobs:
               `| Documentation | ${evaluation.documentation}/10 | ${evaluation.documentation_rationale} |`,
               `| Feasibility | ${evaluation.feasibility}/10 | ${evaluation.feasibility_rationale} |`,
               `| Impact | ${evaluation.impact}/10 | ${evaluation.impact_rationale} |`,
-              `| **Total** | **${total}/50** | |`,
+              totalRow,    // ← use variable instead of inline **
               '',
               '### Strengths',
               evaluation.strengths,
