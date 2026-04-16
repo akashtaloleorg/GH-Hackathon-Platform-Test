@@ -68,36 +68,38 @@ jobs:
                           evaluation.documentation + evaluation.feasibility + evaluation.impact;
 
             const body = `## AI Evaluation Report
-
-> **Model:** \`${process.env.EVAL_MODEL || 'gpt-4o'}\` | **Date:** ${new Date().toISOString().split('T')[0]}
-> This evaluation was generated automatically using a standardized rubric. Final rankings incorporate human judge review.
-
-### Scores
-
-| Dimension | Score | Rationale |
-|-----------|-------|-----------|
-| Innovation | ${evaluation.innovation}/10 | ${evaluation.innovation_rationale} |
-| Technical Quality | ${evaluation.technical_quality}/10 | ${evaluation.technical_quality_rationale} |
-| Documentation | ${evaluation.documentation}/10 | ${evaluation.documentation_rationale} |
-| Feasibility | ${evaluation.feasibility}/10 | ${evaluation.feasibility_rationale} |
-| Impact | ${evaluation.impact}/10 | ${evaluation.impact_rationale} |
-| **Total** | **${total}/50** | |
-
-### Strengths
-${evaluation.strengths}
-
-### Areas for Improvement
-${evaluation.improvements}
-
-### Summary
-${evaluation.summary}
-
----
-*To appeal this evaluation, open a Discussion in the [Appeals](../../discussions) category within 48 hours of score publication.*`;
-
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
+            const model = process.env.EVAL_MODEL || 'gpt-4o';
+            const date = new Date().toISOString().split('T')[0];
+ 
+            const body = [
+              '## AI Evaluation Report',
+              '',
+              `> **Model:** \`${model}\` | **Date:** ${date}`,
+              '> This evaluation was generated automatically using a standardized rubric. Final rankings incorporate human judge review.',
+              '',
+              '### Scores',
+              '',
+              '| Dimension | Score | Rationale |',
+              '|-----------|-------|-----------|',
+              `| Innovation | ${evaluation.innovation}/10 | ${evaluation.innovation_rationale} |`,
+              `| Technical Quality | ${evaluation.technical_quality}/10 | ${evaluation.technical_quality_rationale} |`,
+              `| Documentation | ${evaluation.documentation}/10 | ${evaluation.documentation_rationale} |`,
+              `| Feasibility | ${evaluation.feasibility}/10 | ${evaluation.feasibility_rationale} |`,
+              `| Impact | ${evaluation.impact}/10 | ${evaluation.impact_rationale} |`,
+              `| **Total** | **${total}/50** | |`,
+              '',
+              '### Strengths',
+              evaluation.strengths,
+              '',
+              '### Areas for Improvement',
+              evaluation.improvements,
+              '',
+              '### Summary',
+              evaluation.summary,
+              '',
+              '---',
+              '*To appeal this evaluation, open a Discussion in the [Appeals](../../discussions) category within 48 hours of score publication.*'
+            ].join('\n');
               issue_number: context.issue.number,
               body
             });
