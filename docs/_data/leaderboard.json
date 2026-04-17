@@ -1,33 +1,5 @@
 {
-  "generated_at": "2026-04-16T21:27:23.048Z",
-  "total_submissions": 1,
-  "entries": [
-    {
-      "rank": 1,
-      "issue_number": 3,
-      "title": "AI for Climate Resilience & Sustainable Communities",
-      "submitter": "genai-learn",
-      "team": "@genai-learn",
-      "challenge_issue": 1,
-      "repo_url": "https://github.com/genai-learn/genai-mcp-learn",
-      "labels": [
-        "type/solution",
-        "status/evaluated",
-        "phase/judging",
-        "bot/evaluated"
-      ],
-      "scores": {
-        "innovation": 8,
-        "technical_quality": 7,
-        "documentation": 6,
-        "feasibility": 7,
-        "impact": 9,
-        "total": 37
-      },
-      "is_finalist": false,
-      "is_winner": false,
-      "evaluated_at": "2026-04-16T20:29:55Z",
-      "issue_url": "https://github.com/akashtaloleorg/GH-Hackathon-Platform-Test/issues/3"
-    }
-  ]
+  "generated_at": "2026-04-17T01:22:05.735Z",
+  "total_submissions": 0,
+  "entries": []
 }
